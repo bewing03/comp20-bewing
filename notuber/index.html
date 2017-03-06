@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Map</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="style.css">
+  </head>
+  <body onload="getLocation()">
+    <h1>Not Uber</h1>
+    <div id="map"></div>
+    <div id="infowindow"></div>
+
+<script>
+    var map;
+    var position = {lat: 0, lng: 0};
+    var driver_icon = {};
+    var passenger_icon = {};
+    
+    function postLocation(position) {
+        var marker = new google.maps.Marker({
+            position: position,
+            map: map,
+            icon: driver_icon,
+            title: "4aTtB30R"
+        });
+        
+        marker.setMap(map);
+        var xhr = new XMLHttpRequest;
+        var params = "username=4aTtB30R&lat=" + position.lat + "&lng=" + position.lng;
+        xhr.open("POST", "https://defense-in-derpth.herokuapp.com/submit", true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    
+        xhr.onreadystatechange = function() {
+				if (xhr.readyState == 4 && xhr.status == 200) {
+					elements = JSON.parse(xhr.responseText);
+                    console.log(elements); //remove later
+                    for (count = 0; count < elements.passengers.length; count++) {
+                        var passenger = elements.passengers[count];
+                        addPassenger(passenger);
+                    }
+                }
+			};
+        
+        xhr.send(params);
+    }
+    
+    function getLocation() {
+		if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(pos) {
+			position.lat = pos.coords.latitude;
+			position.lng = pos.coords.longitude;
+            initMap();
+            postLocation(position);
+            });
+        }
+        else {
+            alert("Geolocation not supported on browser");
+        }
+    }
+    
+    function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+            center: position,
+            zoom: 17
+        });
+        
+        driver_icon = {
+        url: "black_car.png", // url
+        scaledSize: new google.maps.Size(37.5, 14.25) // size
+    };
+    
+        passenger_icon = {
+        url: "pass_icon.png", // url
+        scaledSize: new google.maps.Size(25, 30) // size
+    };
+    }
+    
+    function addPassenger(passenger) {
+        var LatLng = {lat: 0, lng: 0};
+        LatLng.lat = passenger.lat;
+        LatLng.lng = passenger.lng;
+        var marker = new google.maps.Marker({
+            position: LatLng,
+            map: map,
+            icon: passenger_icon,
+            title: passenger.username
+        });
+        marker.setMap(map);
+    }
+    
+</script>
+      
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCD6gdbAjVxf38Y8KbNIsE-sQnBptDX5fE&callback=initMap"
+    async defer></script>
+  </body>
+</html>
