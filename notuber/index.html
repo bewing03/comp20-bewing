@@ -15,7 +15,7 @@
     var position = {lat: 0, lng: 0};
     var driver_icon = {};
     var passenger_icon = {};
-    var user = {lat: 0, lng: 0, username: ""};
+    var user = {lat: 0, lng: 0, username: "4aTtB30R"};
     
     function getLocation() {
 		if (navigator.geolocation) {
@@ -74,7 +74,8 @@
             coords2 = [element.lng, element.lat];
             var distance = haversineDistance(coords1, coords2, true);
             distance = distance.toFixed(2);
-            document.getElementById("infowindow").innerHTML = distance;
+            document.getElementById("infowindow").innerHTML = "<h2>" + marker.title + "</h2>";
+            document.getElementById("infowindow").innerHTML += "<h2>" + distance + " miles away</h2>";
         });
         marker.setMap(map);
     }
