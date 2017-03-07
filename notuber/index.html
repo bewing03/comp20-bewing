@@ -73,6 +73,7 @@
             coords1 = [user.lng, user.lat];
             coords2 = [element.lng, element.lat];
             var distance = haversineDistance(coords1, coords2, true);
+            distance = distance.toFixed(2);
             document.getElementById("infowindow").innerHTML = distance;
         });
         marker.setMap(map);
@@ -91,7 +92,9 @@
             coords1 = [user.lng, user.lat];
             coords2 = [element.lng, element.lat];
             var distance = haversineDistance(coords1, coords2, true);
-            document.getElementById("infowindow").innerHTML = "<h2>" + distance + "</h2>";
+            distance = distance.toFixed(2);
+            document.getElementById("infowindow").innerHTML = "<h2>" + marker.title + "</h2>";
+            document.getElementById("infowindow").innerHTML += "<h2>" + distance + " miles away</h2>";
         });
         marker.setMap(map);
     }
