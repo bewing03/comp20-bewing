@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Simple Map</title>
+    <title>Not Uber</title>
     <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="style.css">
@@ -15,14 +15,15 @@
     var position = {lat: 0, lng: 0};
     var driver_icon = {};
     var passenger_icon = {};
+    var user = {lat: 0, lng: 0, username: ""};
     
     function getLocation() {
 		if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(pos) {
-			position.lat = pos.coords.latitude;
-			position.lng = pos.coords.longitude;
+			user.lat = pos.coords.latitude;
+			user.lng = pos.coords.longitude;
             initMap();
-            postLocation(position);
+            postLocation();
             });
         }
         else {
@@ -30,29 +31,28 @@
         }
     }
     
-    function postLocation(position) {
+    function postLocation() {
         var xhr = new XMLHttpRequest;
-        var params = "username=4aTtB30R&lat=" + position.lat + "&lng=" + position.lng;
+        var params = "username=4aTtB30R&lat=" + user.lat + "&lng=" + user.lng;
         xhr.open("POST", "https://defense-in-derpth.herokuapp.com/submit", true);
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         
         xhr.onreadystatechange = function() {
 				if (xhr.readyState == 4 && xhr.status == 200) {
 					elements = JSON.parse(xhr.responseText);
-                    console.log(elements); //remove later
                     var list_type = Object.keys(elements);
                     if (list_type == "passengers") {
-                        //addDriver();
+                        addDriver(user);
                         for (count = 0; count < elements.passengers.length; count++) {
                             var element = elements.passengers[count];
                             addPassenger(element);
                         }
                     }
-                    if (list_type == "passengers") {
-                        //addPassenger();
-                        for (count = 0; count < elements.passengers.length; count++) {
-                            var element = elements.passengers[count];
-                            addPassenger(element);
+                    if (list_type == "vehicles") {
+                        addPassenger(user);
+                        for (count = 0; count < elements.vehicles.length; count++) {
+                            var element = elements.vehicles[count];
+                            addDriver(element);
                         }
                     }
                 }
@@ -66,9 +66,15 @@
         var marker = new google.maps.Marker({
                 position: position,
                 map: map,
-                icon: passenger_icon,
+                icon: driver_icon,
                 title: element.username
             });
+        marker.addListener('click', function() {
+            coords1 = [user.lng, user.lat];
+            coords2 = [element.lng, element.lat];
+            var distance = haversineDistance(coords1, coords2, true);
+            document.getElementById("infowindow").innerHTML = distance;
+        });
         marker.setMap(map);
     }
     
@@ -81,12 +87,18 @@
                 icon: passenger_icon,
                 title: element.username
             });
+        marker.addListener('click', function() {
+            coords1 = [user.lng, user.lat];
+            coords2 = [element.lng, element.lat];
+            var distance = haversineDistance(coords1, coords2, true);
+            document.getElementById("infowindow").innerHTML = "<h2>" + distance + "</h2>";
+        });
         marker.setMap(map);
     }
     
     function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
-            center: position,
+            center: user,
             zoom: 17
         });
         
@@ -99,6 +111,29 @@
         url: "pass_icon.png", // url
         scaledSize: new google.maps.Size(25, 30) // size
         };
+    }
+    
+    function haversineDistance(coords1, coords2, isMiles) {
+        function toRad(x) {
+        return x * Math.PI / 180;
+    }
+        var lon1 = coords1[0];
+        var lat1 = coords1[1];
+        var lon2 = coords2[0];
+        var lat2 = coords2[1];
+        var R = 6371; // km
+        var x1 = lat2 - lat1;
+        var dLat = toRad(x1);
+        var x2 = lon2 - lon1;
+        var dLon = toRad(x2)
+        var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        var d = R * c;
+        if(isMiles) d /= 1.60934;
+
+        return d;
     }
 </script>
       

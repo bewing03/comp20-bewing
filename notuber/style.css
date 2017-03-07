@@ -1,15 +1,17 @@
 #map {
     width: 90%;
     height: 50%;
-    position: absolute;
-    top:0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: auto;    
     border-style: solid;
     border-color: white;
     padding-top: 100px;
+    margin: auto;
+}
+
+#infowindow {
+    color: white;
+    font-family: uber;
+    margin: auto;
+    text-align: center;
 }
 
 h1 {
