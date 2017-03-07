@@ -1,6 +1,4 @@
-# README for NotUber
-
-# Features for NotUber
+# NotUber
 
 ## This page uses the navigator.geolocation object in Javascript to determine the location of the user and sends the data to a datastore API with passenger and vehicle info using an XMLHttpRequest POST route. 
 
