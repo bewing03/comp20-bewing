@@ -12,10 +12,12 @@
     <div id="infowindow"></div>
 <script>
     var map;
+    var infowindow;
     var position = {lat: 0, lng: 0};
     var driver_icon = {};
     var passenger_icon = {};
     var user = {lat: 0, lng: 0, username: "4aTtB30R"};
+    var contentString = "";
     
     function getLocation() {
 		if (navigator.geolocation) {
@@ -74,8 +76,11 @@
             coords2 = [element.lng, element.lat];
             var distance = haversineDistance(coords1, coords2, true);
             distance = distance.toFixed(2);
-            document.getElementById("infowindow").innerHTML = "<h2>" + marker.title + "</h2>";
-            document.getElementById("infowindow").innerHTML += "<h2>" + distance + " miles away</h2>";
+            contentString = "<h2>" + marker.title + "</h2><h2>" + distance + "miles away</h2>";
+            infowindow.setContent(contentString);
+            infowindow.open(map, marker);
+            //document.getElementById("infowindow").innerHTML = "<h2>" + marker.title + "</h2>";
+            //document.getElementById("infowindow").innerHTML += "<h2>" + distance + " miles away</h2>";
         });
         marker.setMap(map);
     }
@@ -94,16 +99,24 @@
             coords2 = [element.lng, element.lat];
             var distance = haversineDistance(coords1, coords2, true);
             distance = distance.toFixed(2);
-            document.getElementById("infowindow").innerHTML = "<h2>" + marker.title + "</h2>";
-            document.getElementById("infowindow").innerHTML += "<h2>" + distance + " miles away</h2>";
+            contentString = "<h2>" + marker.title + "</h2><h2>" + distance + "miles away</h2>";
+            infowindow.setContent(contentString);
+            infowindow.open(map, marker);
+            //document.getElementById("infowindow").innerHTML = "<h2>" + marker.title + "</h2>";
+            //document.getElementById("infowindow").innerHTML += "<h2>" + distance + " miles away</h2>";
         });
         marker.setMap(map);
+        
     }
     
     function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
             center: user,
             zoom: 17
+        });
+        
+        infowindow = new google.maps.InfoWindow({
+          content: contentString
         });
         
         driver_icon = {
