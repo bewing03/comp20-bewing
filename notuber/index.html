@@ -76,7 +76,7 @@
             coords2 = [element.lng, element.lat];
             var distance = haversineDistance(coords1, coords2, true);
             distance = distance.toFixed(2);
-            contentString = "<h2>" + marker.title + "</h2><h2>" + distance + "miles away</h2>";
+            contentString = "<h2>" + marker.title + "</h2><h2>" + distance + " miles away</h2>";
             infowindow.setContent(contentString);
             infowindow.open(map, marker);
             //document.getElementById("infowindow").innerHTML = "<h2>" + marker.title + "</h2>";
@@ -99,7 +99,7 @@
             coords2 = [element.lng, element.lat];
             var distance = haversineDistance(coords1, coords2, true);
             distance = distance.toFixed(2);
-            contentString = "<h2>" + marker.title + "</h2><h2>" + distance + "miles away</h2>";
+            contentString = "<h2>" + marker.title + "</h2><h2>" + distance + " miles away</h2>";
             infowindow.setContent(contentString);
             infowindow.open(map, marker);
             //document.getElementById("infowindow").innerHTML = "<h2>" + marker.title + "</h2>";
