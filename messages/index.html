@@ -7,13 +7,14 @@
   <script>
     $(document).ready(function(){
         $.getJSON( "https://messagehub.herokuapp.com/messages.json", function( data ) {
-            var items = [];
-        $.each( data, function( index, val ) {
-            if (index == 1) {
-                $( "#messages" ).html("<p>" + val.content + "</p>");
-            }
-            $("#messages").append("<p>" + val.content + "</p>");
-        });
+            $.each( data, function( index, val ) {
+                if (index == 0) {
+                    $( "#messages" ).html("<p>" + val.content + " by " + val.username + "</p>");
+                }
+                else {
+                    $("#messages").append("<p>" + val.content + " by " + val.username + "</p>");
+                }
+            });
         });
     });
   </script>
